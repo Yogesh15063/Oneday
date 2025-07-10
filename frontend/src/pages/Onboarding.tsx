@@ -1,4 +1,5 @@
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { useNavigate } from "react-router-dom";
+import { Card, CardHeader,  CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 export default function Onboarding() {
@@ -9,10 +10,18 @@ export default function Onboarding() {
     "Become a UI?UX Designer",
     "Learn System Design",
   ];
+  const navigate = useNavigate()
   const [selectedGoal, setSelectedGoal] = useState<string>("");
   const onClickHandler = (goal: string) => {
     setSelectedGoal(goal);
   };
+
+  const continueHandler = ()=>{
+    if (selectedGoal){
+      localStorage.setItem("selectedGoal",selectedGoal);
+      navigate("/task")
+    }
+  }
   return (
     <>
       <div className="h-screen w-full flex flex-col items-center px-4 py-4 overflow-hidden ">
@@ -40,7 +49,7 @@ export default function Onboarding() {
           ))}
         </div>
         <div className="mt-6">
-          <Button className="cursor-pointer" disabled={selectedGoal === ""}>
+          <Button onClick={continueHandler} className="cursor-pointer" disabled={selectedGoal === ""}>
             Continue
           </Button>
         </div>
