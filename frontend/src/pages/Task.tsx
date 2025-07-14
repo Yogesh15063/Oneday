@@ -1,24 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-
+import { goalTasks } from "@/constants/goalTasks";
+import type{ TaskType } from "@/types/task.ts";
 export default function Task() {
-  // const tasks: string[] = [
-  //   "Watch an intro video on your selected skill.",
-  //   "Set up your development environment.",
-  //   "Follow a basic tutorial and build a small project.",
-  //   "Take a short quiz to test your understanding.",
-  // ];
+  
   const handleTaskComplete = () => {
     localStorage.setItem("taskCompleted", "true");
     localStorage.setItem("lastCompletedDate", new Date().toDateString());
     setTaskCompleted(true);
   };
-
   const [currentDay, setCurrentDay] = useState<number>(1);
   const [taskCompleted, setTaskCompleted] = useState<boolean>(false);
-  const [task, setTask] = useState<string>("");
   const navigate = useNavigate();
   const [mygoal, setGoal] = useState<string | null>("");
+  const dailyTask:TaskType[] = mygoal?goalTasks[mygoal]:[];
+
+  const currentDayTask = dailyTask[currentDay-1]
   useEffect(() => {
     const today = new Date().toDateString();
     const completedDay = parseInt(localStorage.getItem("completedDay") || "0");
@@ -43,14 +40,8 @@ export default function Task() {
       navigate("/");
     }
 
-    const fakeTasks = [
-      "Day 1: Setup your environment",
-      "Day 2: Learn HTML basics",
-      "Day 3: Build your first webpage",
-      "Day 4: Style it with CSS",
-      "Day 5: Learn basic JS"
-    ];
-    setTask(fakeTasks[completedDay] || "🎉 You've completed all tasks!");
+    
+
   }, []);
 
   return (
@@ -63,7 +54,7 @@ export default function Task() {
         </div>
       ) : (
         <>
-          <p className="mb-4">{task}</p>
+          <p className="mb-4">{}</p>
           <button
             onClick={handleTaskComplete}
             className="bg-blue-600 text-white px-4 py-2 rounded"
